@@ -41,9 +41,9 @@ export class UsuarioModel {
     }
 
     static async update(id: number, usuario: IUsuario): Promise<boolean> {
-        const { nombre, email, contraseña, rol } = usuario;
+        const { nombre, email, rol } = usuario;
         const [result] = await pool.query<ResultSetHeader>(
-            userQuery.UPDATE_USER, [nombre, email, contraseña, rol, id]
+            userQuery.UPDATE_USER, [nombre, email, rol, id]
         );
         return result.affectedRows > 0;
     }
@@ -68,5 +68,12 @@ export class UsuarioModel {
             userQuery.EXISTS_USER, [email]
         );
         return (rows as IUsuario[]).length > 0;
+    }
+
+    static async delete(id: number): Promise<boolean> {
+        const [rows] = await pool.query<ResultSetHeader>(
+            userQuery.DELETE_USER, [id]
+        );
+        return rows.affectedRows > 0;
     }
 }

@@ -32,3 +32,7 @@ export const UPDATE_PASSWORD = `
 export const EXISTS_USER = `
     SELECT 1 FROM usuario WHERE email = ? LIMIT 1
 `;
+
+export const DELETE_USER = `
+    DELETE FROM usuario WHERE id = ?
+`;
