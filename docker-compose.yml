@@ -5,11 +5,11 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: examen_db
+      MYSQL_DATABASE: UTNExamen
       MYSQL_USER: examen_user
-      MYSQL_PASSWORD: examenpassword
+      MYSQL_PASSWORD: examen_pass
     ports:
-      - "3306:3306"
+      - "3309:3306"
     volumes:
       - db_data:/var/lib/mysql
   
@@ -31,7 +31,7 @@ services:
     environment:
       NODE_ENV: development
       PORT: 3000
-      DB_HOST: mysql
+      DB_HOST: mysql_db
       DB_USER: user_examen
       DB_PASSWORD: examen_pass
       DB_NAME: UTNExamen
