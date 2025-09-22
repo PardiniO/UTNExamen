@@ -1,5 +1,5 @@
 export interface IRespuestaAPI<T> {
     success: boolean;
-    data?: T;
+    data?: T | number;
     message: string;
 }

@@ -10,8 +10,8 @@ router.post('/login', validateLogin, userController.login);
 
 router.post('/', authGuard, roleGuard('superAdmin'), validateRegister, userController.register);
 
-router.delete('/:id', authGuard, roleGuard('superAdmin'), userController.deleteUser);
+router.delete('/:id', authGuard, roleGuard('superAdmin'),validateLogin, userController.deleteUser);
 
-router.get('/', authGuard, roleGuard('superAdmin', 'admin'), userController.getUsers);
+router.get('/', authGuard, roleGuard('superAdmin', 'admin'),validateLogin, userController.getUsers);
 
 export default router;
