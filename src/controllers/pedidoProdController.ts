@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import * as pedidoProdService from "../services/pedidoProdService";
-import { PedidoProductoModel } from "../models/pedidoProdModel";
 
 export async function addProductToPedido(req: Request, res: Response) {
     try {
