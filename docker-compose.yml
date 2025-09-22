@@ -1,0 +1,44 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: examen_db
+      MYSQL_USER: examen_user
+      MYSQL_PASSWORD: examenpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+  
+  adminer:
+    image: adminer
+    container_name: adminer_examen
+    restart: always
+    ports:
+      - "8080:8080"
+  
+  api:
+    build: .
+    container_name: api_service
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DB_HOST: mysql
+      DB_USER: user_examen
+      DB_PASSWORD: examen_pass
+      DB_NAME: UTNExamen
+      JWT_SECRET: secreto_examen
+    depends_on:
+      - db
+    volumes:
+      - .:/usr/src/app
+      - :/usr/src/app/node_modules
+
+volumes:
+  db_data:
