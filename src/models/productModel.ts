@@ -1,12 +1,11 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../config/db";
 import * as productQuery from "../queries/productQueries";
-import * as productoTable from "../tables/productoTable";
 import { IProducto } from "../interfaces/productInterface";
 
 export class ProductoModel {
     static async create(datos: IProducto): Promise<number> {
-        const [result] = await pool.query<ResultSetHeader>(productoTable.PROD_TABLE, [datos]);
+        const [result] = await pool.query<ResultSetHeader>(productQuery.CREATE_PROD, [datos]);
         return result.insertId;
     }
 

@@ -2,11 +2,10 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../config/db";
 import { IPedido } from "../interfaces/pedidoInterface";
 import * as pedidoQueries from "../queries/pedidoQueries";
-import * as pedidoTable from "../tables/pedidoTable";
 
 export class PedidoModel {
     static async create(datos: IPedido): Promise<number> {
-        const [result] = await pool.query<ResultSetHeader>(pedidoTable.PEDIDO_TABLE, [datos]);
+        const [result] = await pool.query<ResultSetHeader>(pedidoQueries.CREATE_PEDIDO, [datos]);
         return result.insertId;
     };
 
