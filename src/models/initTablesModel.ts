@@ -4,15 +4,25 @@ import { PEDIDO_TABLE } from "../tables/pedidoTable";
 import { PROD_TABLE } from "../tables/productoTable";
 import { PEDIDO_PROD_TABLE } from "../tables/pedidoProdTable";
 
-export async function initTable() {
+export async function initTables() {
     try {
-        await pool.query(USER_TABLE);
-        await pool.query(PEDIDO_TABLE);
-        await pool.query(PROD_TABLE);
-        await pool.query(PEDIDO_PROD_TABLE);
+        for (const query of USER_TABLE) {
+            await pool.query(query);
+        }
+        for (const query of PEDIDO_TABLE) {
+            await pool.query(query);
+        }
+        for (const query of PROD_TABLE) {
+            await pool.query(query);
+        }
+        for (const query of PEDIDO_PROD_TABLE) {
+            await pool.query(query);
+        }
         console.log("Tablas creadas correctamente");
     } catch (err) {
         console.log("Error creando tablas:", err);
         process.exit(1);
     }
 }
+
+initTables();

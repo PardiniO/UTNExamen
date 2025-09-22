@@ -16,7 +16,7 @@ app.use('/pedidos', pedidoRoutes);
 app.use('/pedido-productos', pedidoProductoRoutes);
 
 import { Request, Response, NextFunction } from "express";
-import { initTable } from "./models/initTablesModel";
+import { initTables } from "./models/initTablesModel";
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || 500;
     res.status(status).json({
@@ -27,6 +27,6 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
 
 const PORT = process.env.PORT || 3000;
 
-initTable().then(() => {
+initTables().then(() => {
     app.listen(PORT, () => console.log(`Servidor corriendo en puerto http://localhost:${PORT}`));
 });
