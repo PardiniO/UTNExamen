@@ -9,7 +9,7 @@ export class PedidoProductoModel {
         return result.insertId;
     } 
 
-    static async getProdById(id_pedido: number): Promise<IPedidoProducto> {
+    static async getProductsByPedido(id_pedido: number): Promise<IPedidoProducto> {
         const [rows] = await pool.query<RowDataPacket[]>(queries.GET_PROD_BY_PEDIDO, [id_pedido]);
         return (rows[0] as IPedidoProducto);
     }
