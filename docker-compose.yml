@@ -19,28 +19,6 @@ services:
     restart: always
     ports:
       - "8080:8080"
-  
-  api:
-    build: 
-      context: .
-      target: dev
-    container_name: api_service
-    restart: always
-    ports:
-      - "3000:3000"
-    environment:
-      NODE_ENV: development
-      PORT: 3000
-      DB_HOST: mysql_db
-      DB_USER: user_examen
-      DB_PASSWORD: examen_pass
-      DB_NAME: UTNExamen
-      JWT_SECRET: secreto_examen
-    depends_on:
-      - mysql
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
 
 volumes:
   db_data:

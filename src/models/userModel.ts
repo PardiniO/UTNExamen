@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { pool } from "../config/db";
 import { IUsuario } from "../interfaces/userInterface";
 import * as userQuery from "../queries/userQueries";
+import * as userTable from "../tables/userTable";
 
 export class UsuarioModel {
     static async create(usuario: IUsuario): Promise<number> {
@@ -12,7 +13,7 @@ export class UsuarioModel {
                 throw new Error("Todos los campos son obligatorios");
             }
             const [result] = await pool.query<ResultSetHeader>(
-                userQuery.INSERT_USER, 
+                userTable.USER_TABLE, 
                 [nombre, email, contraseña, rol]
             );
             return result.insertId;
