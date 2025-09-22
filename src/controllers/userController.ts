@@ -69,7 +69,7 @@ export async function login(req: Request, res: Response) {
             rol: user.rol
         };
 
-        const secret: jwt.Secret = process.env.JWT_SECRET ?? 'secret';
+        const secret: jwt.Secret = process.env.JWT_SECRET ?? 'default_secreto_examen';
         const expiresIn = process.env.JWT_EXPIRES ?? '1h';
         const options: jwt.SignOptions = { expiresIn };
 
