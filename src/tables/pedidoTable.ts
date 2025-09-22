@@ -1,5 +1,5 @@
 export const PEDIDO_TABLE = `
-    CREATE IF EXISTS pedido (
+    CREATE TABLE IF EXISTS pedido (
         id INT AUTO_INCREMENT PRIMARY KEY,
         id_usuario INT NOT NULL,
         fecha_pedido DATE NOT NULL,

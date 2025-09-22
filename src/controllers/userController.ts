@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import * as UsuarioService from "../services/usuarioService";
-import { IUsuarioInput } from "../interfaces/userIterface";
+import { IUsuario } from "../interfaces/userInterface";
 import { IRespuestaAPI } from "../interfaces/resAPIInterface";
 import * as jwt from "jsonwebtoken";
 
-export async function register(req: Request, res: Response) {
+export async function register(req: Request, res: Response, next: NextFunction) {
     try {
         const { nombre, email, contraseña, rol } = req.body;
         
@@ -22,7 +22,7 @@ export async function register(req: Request, res: Response) {
             email, 
             contraseña, 
             rol: rol || 'user'
-        } as IUsuarioInput);
+        } as IUsuario);
         const userCreated = await UsuarioService.listarPorId(insertId);
         
         if (typeof userCreated === 'number') {
@@ -33,7 +33,7 @@ export async function register(req: Request, res: Response) {
                 res.status(500).json(respuesta);
                 return;
             }
-            const respuesta: IRespuestaAPI<IUsuarioInput> = {
+            const respuesta: IRespuestaAPI<IUsuario> = {
                 success: true,
                 data: newUser,
                 message: 'Usuario creado exitosamente'
@@ -45,14 +45,12 @@ export async function register(req: Request, res: Response) {
             res.status(500).json(respuesta);
             return;
         }
-    } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Error al crear usuario';
-        const respuesta: IRespuestaAPI<null> = { success: false, message };
-        return res.status(500).json(respuesta);
+    } catch (err) {
+        next(err);
     }
 }
 
-export async function login(req: Request, res: Response) {
+export async function login(next: NextFunction, req: Request, res: Response) {
     try {
         const { email, contraseña } = req.body;
 
@@ -77,26 +75,20 @@ export async function login(req: Request, res: Response) {
 
         res.json({ message: 'Inicio de sesión exitoso',payload, token });
     } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Error desconocido';
-        const respuesta: IRespuestaAPI<null> = { success: false, message };
-        res.status(500).json(respuesta);
-        return;
+        next(err);
     }
 }
 
-export async function getUsers(_req: Request, res: Response) {
+export async function getUsers(next: NextFunction, _req: Request, res: Response) {
     try {
         const users = await UsuarioService.listarTodos();
         res.status(200).json(users);
     } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Error desconocido';
-        const respuesta: IRespuestaAPI<null> = { success: false, message };
-        res.status(500).json(respuesta);
-        return;
+        next(err);
     }
 }
 
-export async function getById(req: Request, res: Response) {
+export async function getById(next: NextFunction, req: Request, res: Response) {
     try {
         const { id } = req.params;
         const users = await UsuarioService.listarPorId(Number(id));
@@ -108,13 +100,11 @@ export async function getById(req: Request, res: Response) {
 
         res.json(users);
     } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Error desconocido';
-        const respuesta: IRespuestaAPI<null> = { success: false, message };
-        res.status(500).json(respuesta);
+        next(err);
     }
 }
 
-export async function getByEmail(req: Request, res: Response) {
+export async function getByEmail(next: NextFunction, req: Request, res: Response) {
     try {
         const { email } = req.params;
         const users = await UsuarioService.listarPorEmail(email);
@@ -124,25 +114,21 @@ export async function getByEmail(req: Request, res: Response) {
             return;
         }
     } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Error desconocido';
-        const respuesta: IRespuestaAPI<null> = { success: false, message };
-        res.status(500).json(respuesta);
+        next(err);
     }
 }
 
-export async function getByRole(req: Request, res: Response) {
+export async function getByRole(next: NextFunction, req: Request, res: Response) {
     try {
         const { rol } = req.params;
         const users = await UsuarioService.listarPorRol(rol);
         res.json(users);
     } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Error desconocido';
-        const respuesta: IRespuestaAPI<null> = { success: false, message };
-        res.status(500).json(respuesta);
+        next(err);
     }
 }
 
-export async function updateUser(req: Request, res: Response) {
+export async function updateUser(next: NextFunction, req: Request, res: Response) {
     try {
         const { id } = req.params;
         const { nombre, rol } = req.body;
@@ -160,13 +146,11 @@ export async function updateUser(req: Request, res: Response) {
         const userUpdated = await UsuarioService.listarPorId(Number(id));
         res.json({ message: `Usuario: ${userUpdated} actualizado` });
     } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Error desconocido';
-        const respuesta: IRespuestaAPI<null> = { success: false, message };
-        res.status(500).json(respuesta);
+        next(err);
     }
 }
 
-export async function updatePass(req: Request, res: Response) {
+export async function updatePass(next: NextFunction, req: Request, res: Response) {
     try {
         const { id } = req.params;
         const { nuevaContraseña } = req.body;
@@ -184,36 +168,30 @@ export async function updatePass(req: Request, res: Response) {
 
         res.json({ message: 'Contraseña actualizada correctamente' });
     } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Error desconocido';
-        const respuesta: IRespuestaAPI<null> = { success: false, message };
-        res.status(500).json(respuesta);
+        next(err);
     }
 }
 
-export async function countUsers(_req: Request, res: Response) {
+export async function countUsers(next: NextFunction, _req: Request, res: Response) {
     try {
         const total = await UsuarioService.count();
         res.json({ total });
     } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Error desconocido';
-        const respuesta: IRespuestaAPI<null> = { success: false, message };
-        res.status(500).json(respuesta);
+        next(err);
     }
 }
 
-export async function existUser(req: Request, res: Response) {
+export async function existUser(next: NextFunction, req: Request, res: Response) {
     try {
         const { email } = req.params;
         const existe = await UsuarioService.existe(email);
         res.json({ existe });
     } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Error desconocido';
-        const respuesta: IRespuestaAPI<null> = { success: false, message };
-        res.status(500).json(respuesta);
+        next(err);
     }
 }
 
-export async function deleteUser(req: Request, res: Response) {
+export async function deleteUser(next: NextFunction, req: Request, res: Response) {
     try {
         const { id } = req.params;
         
@@ -225,8 +203,6 @@ export async function deleteUser(req: Request, res: Response) {
 
         res.json({ message: 'Usuario eliminado exitosamente' });
     } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Error desconocido';
-        const respuesta: IRespuestaAPI<null> = { success: false, message };
-        res.status(500).json(respuesta);
+        next(err);
     }
 }
