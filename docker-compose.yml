@@ -21,7 +21,9 @@ services:
       - "8080:8080"
   
   api:
-    build: .
+    build: 
+      context: .
+      target: dev
     container_name: api_service
     restart: always
     ports:
@@ -35,10 +37,10 @@ services:
       DB_NAME: UTNExamen
       JWT_SECRET: secreto_examen
     depends_on:
-      - db
+      - mysql
     volumes:
       - .:/usr/src/app
-      - :/usr/src/app/node_modules
+      - /usr/src/app/node_modules
 
 volumes:
   db_data:
