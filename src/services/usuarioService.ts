@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 import { UsuarioModel } from "../models/userModel";
-import { IUsuario } from "../interfaces/userIterface";
+import { IUsuario, IUsuarioInput } from "../interfaces/userIterface";
 
-export async function registrar(datos: IUsuario) {
+export async function registrar(datos: IUsuarioInput) {
     const existe = await UsuarioModel.exists(datos.email);
     if (existe) throw new Error("Usuario ya registrado");
     
@@ -11,7 +11,7 @@ export async function registrar(datos: IUsuario) {
         ...datos,
         contraseña: hash,
         rol: datos.rol || 'user'
-    };
+    } as IUsuario;
     return UsuarioModel.create(userHash);
 }
 
@@ -46,7 +46,7 @@ export async function actualizar(id: number, nombre: string, rol: 'user' | 'admi
     return UsuarioModel.update(id, usuario);
 }
 
-export async function updatePass(id: number, newPass: string) {
+export async function actualizarContra(id: number, newPass: string) {
     const hash = await bcrypt.hash(newPass, 10);
     return UsuarioModel.updatePass(id, hash);
 }

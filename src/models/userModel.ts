@@ -1,4 +1,4 @@
-import { ResultSetHeader } from "mysql2";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 import bcrypt from "bcrypt";
 import { pool } from "../config/db";
 import { IUsuario } from "../interfaces/userIterface";
@@ -55,12 +55,12 @@ export class UsuarioModel {
         );
         return result.affectedRows > 0;
     }
-
-    static async count(): Promise<IUsuario[]> {
-        const [rows] = await pool.query(
+    
+    static async count(): Promise<number> {
+        const [rows] = await pool.query<RowDataPacket[]>(
             userQuery.COUNT_USER
         );
-        return (rows as IUsuario[])[0].total;
+        return rows[0].total as number;
     }
 
     static async exists(email: string): Promise<boolean> {
