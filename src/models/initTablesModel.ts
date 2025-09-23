@@ -1,28 +1,18 @@
 import { pool } from "../config/db";
-import { USER_TABLE } from "../tables/userTable";
-import { PEDIDO_TABLE } from "../tables/pedidoTable";
-import { PROD_TABLE } from "../tables/productoTable";
-import { PEDIDO_PROD_TABLE } from "../tables/pedidoProdTable";
+import * as userTable from "../tables/userTable";
+import * as pedidoTable from "../tables/pedidoTable";
+import * as productoTable from "../tables/productoTable";
+import * as pedidoProductoTable from "../tables/pedidoProdTable";
 
 export async function initTables() {
     try {
-        for (const query of USER_TABLE) {
-            await pool.query(query);
-        }
-        for (const query of PEDIDO_TABLE) {
-            await pool.query(query);
-        }
-        for (const query of PROD_TABLE) {
-            await pool.query(query);
-        }
-        for (const query of PEDIDO_PROD_TABLE) {
-            await pool.query(query);
-        }
+        await pool.query(userTable.USER_TABLE);
+        await pool.query(pedidoTable.PEDIDO_TABLE);
+        await pool.query(productoTable.PROD_TABLE);
+        await pool.query(pedidoProductoTable.PEDIDO_PROD_TABLE);
         console.log("Tablas creadas correctamente");
     } catch (err) {
         console.log("Error creando tablas:", err);
         process.exit(1);
     }
 }
-
-initTables();
