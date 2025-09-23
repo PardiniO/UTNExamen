@@ -12,6 +12,8 @@ dotenv.config();
 const app: Application = express();
 app.use(express.json());
 
+const PORT = process.env.PORT || 3000;
+
 app.use('/usuarios', userRoutes);
 app.use('/productos', productRoutes);
 app.use('/pedidos', pedidoRoutes);
@@ -27,8 +29,11 @@ app.use((_req: Request, res: Response) => {
     try {
         await testConnection();
         await initTables();
+        app.listen(PORT, () => {
+            console.log(`Servidor corriendo en http://localhost:${PORT}`);
+        });
     } catch (err) {
-        console.error('Error al inicializar la base de datos');
+        console.error('Error al inicializar la base de datos', err);
         process.exit(1);
     }
 })();
@@ -40,9 +45,4 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
         success: false,
         message: message
     });
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en puerto http://localhost:${PORT}`);
 });
