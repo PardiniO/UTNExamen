@@ -1,32 +1,48 @@
-import express, { Application } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
+import { testConnection } from "./config/db";
+import { initTables } from "./models/initTablesModel";
 import userRoutes from "./routes/userRoutes";
 import productRoutes from "./routes/productRoutes";
 import pedidoRoutes from "./routes/pedidoRoutes";
 import pedidoProductoRoutes from "./routes/pedidoProdRoutes";
 
+dotenv.config();
+
 const app: Application = express();
 app.use(express.json());
-
-dotenv.config();
 
 app.use('/usuarios', userRoutes);
 app.use('/productos', productRoutes);
 app.use('/pedidos', pedidoRoutes);
 app.use('/pedido-productos', pedidoProductoRoutes);
+app.use((_req: Request, res: Response) => {
+    res.status(404).json({ 
+        success: false, 
+        message: 'Ruta no encontrada' 
+    });
+});
 
-import { Request, Response, NextFunction } from "express";
-import { initTables } from "./models/initTablesModel";
-app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || 500;
+(async () => {
+    try {
+        await testConnection();
+        await initTables();
+    } catch (err) {
+        console.error('Error al inicializar la base de datos');
+        process.exit(1);
+    }
+})();
+
+app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+    const status = typeof err === 'object' && err !== null && 'status' in err ? (err as any).status : 500;
+    const message = typeof err === 'object' && err !== null && 'message' in err ? (err as any).message : 'Error interno del servidor';
     res.status(status).json({
-        succes: false,
-        message: err.message || 'Error interno del servidor'
+        success: false,
+        message: message
     });
 });
 
 const PORT = process.env.PORT || 3000;
-
-initTables().then(() => {
-    app.listen(PORT, () => console.log(`Servidor corriendo en puerto http://localhost:${PORT}`));
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en puerto http://localhost:${PORT}`);
 });

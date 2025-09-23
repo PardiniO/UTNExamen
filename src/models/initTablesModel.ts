@@ -10,9 +10,9 @@ export async function initTables() {
         await pool.query(pedidoTable.PEDIDO_TABLE);
         await pool.query(productoTable.PROD_TABLE);
         await pool.query(pedidoProductoTable.PEDIDO_PROD_TABLE);
+
         console.log("Tablas creadas correctamente");
     } catch (err) {
         console.log("Error creando tablas:", err);
-        process.exit(1);
     }
 }
