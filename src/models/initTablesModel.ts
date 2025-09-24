@@ -1,8 +1,8 @@
-import { pool, testConnection } from "../config/db";
+import { pool, waitForDB } from "../config/db";
 
 export async function initTables() {
     try {
-        await testConnection();
+        await waitForDB(15, 2000);
         await pool.query(`
             CREATE TABLE IF NOT EXISTS usuario (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -33,7 +33,7 @@ export async function initTables() {
         `);
 
         await pool.query(`
-            CREATE TABLE IF NOT EXISTS pedido_p (
+            CREATE TABLE IF NOT EXISTS pedido_producto (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 id_pedido INT NOT NULL,
                 id_producto INT NOT NULL,
