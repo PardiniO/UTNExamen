@@ -1,5 +1,4 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
-import bcrypt from "bcrypt";
 import { pool } from "../config/db";
 import { IUsuario } from "../interfaces/userInterface";
 import * as userQuery from "../queries/userQueries";
@@ -7,13 +6,13 @@ import * as userQuery from "../queries/userQueries";
 export class UsuarioModel {
     static async create(usuario: IUsuario): Promise<number> {
         try {
-            const { nombre, email, contraseña, rol } = usuario;
-            if (!nombre || !email || !contraseña) {
+            const { nombre, email, password, rol } = usuario;
+            if (!nombre || !email || !password) {
                 throw new Error("Todos los campos son obligatorios");
             }
             const [result] = await pool.query<ResultSetHeader>(
                 userQuery.INSERT_USER, 
-                [nombre, email, contraseña, rol]
+                [nombre, email, password, rol]
             );
             return result.insertId;
             
@@ -80,12 +79,8 @@ export class UsuarioModel {
         }
     }
 
-    static async updatePass(id: number, newPass: string): Promise<boolean> {
+    static async updatePass(id: number, hash: string): Promise<boolean> {
         try {
-            if (!newPass) {
-                throw new Error("Coloque una nueva contraseña para poder cambiarla");
-            }
-            const hash = await bcrypt.hash(newPass, 10);
             const [result] = await pool.query<ResultSetHeader>(
                 userQuery.UPDATE_PASSWORD, [hash, id]
             );

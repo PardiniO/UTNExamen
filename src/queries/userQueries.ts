@@ -1,9 +1,9 @@
 const BASE_SELECT_USER = `
-    SELECT id, nombre, email, rol, fecha_creacion
-    FROM usuario;
+    SELECT id, nombre, email, rol
+    FROM usuario
 `;
 
-export const SELECT_ALL_USERS = BASE_SELECT_USER;
+export const SELECT_ALL_USERS = BASE_SELECT_USER + `;`;
 
 export const SELECT_USER_BY_ID = BASE_SELECT_USER + `WHERE id = ?;`;
 
@@ -12,7 +12,7 @@ export const SELECT_USER_BY_EMAIL = BASE_SELECT_USER + `WHERE email = ?;`;
 export const SELECT_USER_BY_ROLE = BASE_SELECT_USER + `WHERE rol = ?;`;
 
 export const INSERT_USER = `
-    INSER INTO usuario (nombre, email, contraseña, rol)
+    INSERT INTO usuario (nombre, email, password, rol)
     VALUES (?, ?, ?, ?);
 `;
 
@@ -22,11 +22,11 @@ export const COUNT_USER = `
 `;
 
 export const UPDATE_USER = `
-    UPDATE usuario SET nombre = ?, rol = ?, WHERE id = ?;
+    UPDATE usuario SET nombre = ?, rol = ? WHERE id = ?;
 `;
 
 export const UPDATE_PASSWORD = `
-    UPDATE usuario SET contraseña = ? WHERE id = ?;
+    UPDATE usuario SET password = ? WHERE id = ?;
 `;
 
 export const EXISTS_USER = `

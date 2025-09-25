@@ -9,7 +9,7 @@ function validarUsuario(datos: IUsuario) {
     if (!datos.email || typeof datos.email !== "string" || !datos.email.includes("@")) {
         throw new Error("Email inválido");
     }
-    if (!datos.contraseña || typeof datos.contraseña !== "string" || datos.contraseña.length < 6) {
+    if (!datos.password || typeof datos.password !== "string" || datos.password.length < 6) {
         throw new Error("Contraseña inválida (mínimo 6 caracteres)");
     }
 }
@@ -20,10 +20,10 @@ export async function registrar(datos: IUsuario) {
         const existe = await UsuarioModel.exists(datos.email);
         if (existe) throw new Error("Usuario ya registrado");
         
-        const hash = await bcrypt.hash(datos.contraseña, 10);
+        const hash = await bcrypt.hash(datos.password, 10);
         const userHash: IUsuario = {
             ...datos,
-            contraseña: hash,
+            password: hash,
             rol: datos.rol || 'user'
         } as IUsuario;
         return UsuarioModel.create(userHash);
@@ -32,14 +32,14 @@ export async function registrar(datos: IUsuario) {
     }
 }
 
-export async function login(email: string, contraseña: string) {
+export async function login(email: string, password: string) {
     try {
-        if (!email || !contraseña) throw new Error("Email y contraseña requeridos");
+        if (!email || !password) throw new Error("Email y contraseña requeridos");
         
         const user = await UsuarioModel.findByEmail(email);
         if (!user) throw new Error("Credenciales inválidas");
         
-        const match = await bcrypt.compare(contraseña, user.contraseña);
+        const match = await bcrypt.compare(password, user.password);
         if (!match) throw new Error("Credenciales inválidas");
         
         return user;

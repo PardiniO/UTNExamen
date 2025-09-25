@@ -27,7 +27,7 @@ export const validateLogin = [
     body('email')
         .notEmpty().withMessage('Email es obligatorio')
         .isEmail().withMessage('Formato de email inválido'),
-    body('contraseña')
+    body('password')
         .notEmpty().withMessage('Contrseña es obligatoria'),
     handleValidationErrors
 ];

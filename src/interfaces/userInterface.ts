@@ -2,7 +2,7 @@ export interface IUsuario {
     id?: number;
     nombre: string;
     email: string;
-    contraseña: string;
+    password: string;
     rol?: 'user' | 'admin' | 'superAdmin';
     fechaCreacion?: Date;
 }
