@@ -18,11 +18,23 @@ Backend para gestión de usuarios, productos y pedidos con Node.js, Express, MyS
 git clone https://github.com/PardiniO/UTNExamen.git
 cd <NOMBRE_DEL_REPOSITORIO>
 ```
-2. Construir y levantar los contenedores con Docker:
+2. Instalar dependencias:
+```bash
+npm install
+```
+3. Construir y levantar los contenedores con Docker:
 ```bash
 docker-compose up -d --build
 ```
-3. Apagar contendores:
+4. Compilar proyecto:
+```bash
+npm run buil
+```
+5. Ejecutar proyecto:
+```bash
+npm start
+```
+6. Apagar contendores:
 ```bash
 docker-compose down
 ```
@@ -87,7 +99,4 @@ Pedidos:
 - admin → puede gestionar productos y ver pedidos.
 
 - user → puede crear pedidos y ver sus propios pedidos
-
-
-
 
