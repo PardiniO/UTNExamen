@@ -5,7 +5,9 @@ import * as pedidoQueries from "../queries/pedidoQueries";
 
 export class PedidoModel {
     static async create(datos: IPedido): Promise<number> {
-        const [result] = await pool.query<ResultSetHeader>(pedidoQueries.CREATE_PEDIDO, [datos]);
+        const [result] = await pool.query<ResultSetHeader>(
+            pedidoQueries.CREATE_PEDIDO, 
+            [datos.id_usuario, datos.fecha_pedido, datos.estado]);
         return result.insertId;
     };
 
@@ -20,7 +22,9 @@ export class PedidoModel {
     }
 
     static async update(datos: IPedido): Promise<boolean> {
-        const [result] = await pool.query<ResultSetHeader>(pedidoQueries.UPDATE_PEDIDO, [datos]);
+        const [result] = await pool.query<ResultSetHeader>(
+            pedidoQueries.UPDATE_PEDIDO, 
+            [datos.id_usuario, datos.fecha_pedido, datos.estado, datos.id]);
         return result.affectedRows > 0;
     }
 

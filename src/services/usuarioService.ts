@@ -37,10 +37,12 @@ export async function login(email: string, password: string) {
         if (!email || !password) throw new Error("Email y contraseña requeridos");
         
         const user = await UsuarioModel.findByEmail(email);
-        if (!user) throw new Error("Credenciales inválidas");
+        if (!user) throw new Error("Usuario no encontrado");
+
+        if (!user.password) throw new Error("Usuario no tiene contraseña guardada");
         
         const match = await bcrypt.compare(password, user.password);
-        if (!match) throw new Error("Credenciales inválidas");
+        if (!match) throw new Error("Credenciales incorrectas");
         
         return user;
     } catch (error) {
@@ -83,12 +85,14 @@ export async function listarPorEmail(email: string) {
     }
 }
 
-export async function actualizar(id: number, nombre: string, rol: 'user' | 'admin' | 'superAdmin') {
+export async function actualizar(id: number, nombre: string, email: string, rol: 'user' | 'admin' | 'superAdmin') {
     try {
         if (!id || typeof id !== 'number')throw new Error("ID inválido");
         if (!nombre || typeof nombre !== 'string' || nombre.length < 2) throw new Error("Nombre inválido");
         if (!rol) throw new Error("Rol requerido");
-        const usuario: IUsuario = { nombre, rol } as IUsuario;
+        if(!email) throw new Error("Email requerido");
+        
+        const usuario: IUsuario = { nombre, email, rol } as IUsuario;
         return UsuarioModel.update(id, usuario);
     } catch (error) {
         throw error;
@@ -115,9 +119,9 @@ export async function existe(email: string) {
     }
 }
 
-export async function count() {
+export async function listarConPedidos() {
     try {
-        return UsuarioModel.count();
+        return UsuarioModel.getWithPedidos();
     } catch (error) {
         throw error;
     }

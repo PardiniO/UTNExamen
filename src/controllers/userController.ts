@@ -127,15 +127,19 @@ export async function getByRole(req: Request, res: Response, next: NextFunction)
 
 export async function updateUser(req: Request, res: Response, next: NextFunction) {
     try {
-        const { id } = req.params;
-        const { nombre, rol } = req.body;
+        const id = Number(req.params.id);
+        const { nombre, email, rol } = req.body;
 
-        if (!nombre || !rol) {
+        if (isNaN(id)) {
+            res.status(400).json({ error: 'ID inválido' });
+        }
+
+        if (!nombre || !email || !rol) {
             res.status(400).json({ error: 'Nombre y rol son obligatorios' });
             return;
         }
 
-        const actualizado = await UsuarioService.actualizar(Number(id), nombre, rol);
+        const actualizado = await UsuarioService.actualizar(id, nombre, email, rol);
         if (!actualizado) {
             res.status(404).json({ error: 'Usuario no encontrado' });
             return;
@@ -151,14 +155,14 @@ export async function updateUser(req: Request, res: Response, next: NextFunction
 export async function updatePass(req: Request, res: Response, next: NextFunction) {
     try {
         const { id } = req.params;
-        const { newPass } = req.body;
+        const { password } = req.body;
 
-        if (!newPass) {
+        if (!password) {
             res.status(400).json({ error: 'Coloque la nueva contraseña' });
             return;
         }
 
-        const actualizado = await UsuarioService.actualizarContra(Number(id), newPass);
+        const actualizado = await UsuarioService.actualizarContra(Number(id), password);
         if (!actualizado) {
             res.status(404).json({ error: 'Usuario no encontrado' });
             return;
@@ -170,10 +174,10 @@ export async function updatePass(req: Request, res: Response, next: NextFunction
     }
 }
 
-export async function countUsers(_req: Request, res: Response, next: NextFunction) {
+export async function getWithPedidos(_req: Request, res: Response, next: NextFunction) {
     try {
-        const total = await UsuarioService.count();
-        res.json({ total });
+        const usuarios = await UsuarioService.listarConPedidos();
+        res.json({ data: usuarios });
     } catch (err: unknown) {
         next(err);
     }

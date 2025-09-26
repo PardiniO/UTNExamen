@@ -90,10 +90,10 @@ export class UsuarioModel {
         }
     }
     
-    static async count(): Promise<number> {
+    static async getWithPedidos(): Promise<number> {
         try {
             const [rows] = await pool.query<RowDataPacket[]>(
-                userQuery.COUNT_USER
+                userQuery.COUNT_USER_PEDIDO
             );
             return rows[0].total as number;
         } catch (error) {

@@ -17,7 +17,7 @@ export const validateRegister = [
     body('email')
         .notEmpty().withMessage('Email es obligatorio')
         .isEmail().withMessage('Formato de email inválido'),
-    body('contraseña')
+    body('password')
         .notEmpty().withMessage('Contraseña es obligatiora')
         .isLength({ min: 4 }).withMessage('La contraseña debe tener al menos 4 caracteres'),
     handleValidationErrors

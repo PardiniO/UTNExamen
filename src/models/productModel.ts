@@ -5,7 +5,9 @@ import { IProducto } from "../interfaces/productInterface";
 
 export class ProductoModel {
     static async create(datos: IProducto): Promise<number> {
-        const [result] = await pool.query<ResultSetHeader>(productQuery.CREATE_PROD, [datos]);
+        const [result] = await pool.query<ResultSetHeader>(
+            productQuery.CREATE_PROD, [datos.nombre, datos.precio_unitario, datos.stock]
+        );
         return result.insertId;
     }
 
@@ -20,7 +22,8 @@ export class ProductoModel {
     }
 
     static async update(datos: IProducto): Promise<boolean> {
-        const [result] = await pool.query<ResultSetHeader>(productQuery.UPDATE_PROD, [datos]);
+        const [result] = await pool.query<ResultSetHeader>(
+            productQuery.UPDATE_PROD, [datos.nombre, datos.precio_unitario, datos.stock, datos.id]);
         return result.affectedRows > 0;
     }
 

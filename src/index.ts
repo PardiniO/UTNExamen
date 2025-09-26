@@ -12,10 +12,10 @@ const app: Application = express();
 app.use(express.json());
 
 
-app.use('/usuarios', userRoutes);
-app.use('/productos', productRoutes);
-app.use('/pedidos', pedidoRoutes);
-app.use('/pedido-productos', pedidoProductoRoutes);
+app.use('/api/usuarios', userRoutes);
+app.use('/api/productos', productRoutes);
+app.use('/api/pedidos', pedidoRoutes);
+app.use('/api/pedido-productos', pedidoProductoRoutes);
 
 const PORT = Number(process.env.PORT) || 3000;
 

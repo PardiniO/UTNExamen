@@ -1,5 +1,5 @@
 const BASE_SELECT_USER = `
-    SELECT id, nombre, email, rol
+    SELECT id, nombre, email, rol, password
     FROM usuario
 `;
 
@@ -16,13 +16,16 @@ export const INSERT_USER = `
     VALUES (?, ?, ?, ?);
 `;
 
-export const COUNT_USER = `
-    SELECT COUNT(*) as total
-    FROM usuario;
+export const COUNT_USER_PEDIDO = `
+    SELECT usuario.id, usuario.nombre, usuario.email, usuario.rol, 
+    COUNT(pedido.id) as totalPedidos
+    FROM usuario
+    LEFT JOIN pedido ON usuario.id = pedido.id_usuario
+    GROUP BY usuario.id, usuario.nombre, usuario.email, usuario.rol;
 `;
 
 export const UPDATE_USER = `
-    UPDATE usuario SET nombre = ?, rol = ? WHERE id = ?;
+    UPDATE usuario SET nombre = ?, email = ?, rol = ? WHERE id = ?;
 `;
 
 export const UPDATE_PASSWORD = `

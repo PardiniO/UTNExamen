@@ -8,7 +8,7 @@ export async function initTables() {
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 nombre VARCHAR(100) NOT NULL,
                 email VARCHAR(100) NOT NULL,
-                contraseña VARCHAR(255) NOT NULL,
+                password VARCHAR(255) NOT NULL,
                 fechaCreacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 rol ENUM('superAdmin', 'admin', 'user') DEFAULT 'user'
             ); 
